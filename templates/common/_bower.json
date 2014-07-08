@@ -1,0 +1,27 @@
+{
+  "name": "<%= _.slugify(_.humanize(appname)) %>",
+  "version": "0.0.0",
+  "authors": [
+    "bowang <bo.wang@hbo.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-resource": "1.3.0-beta.13",
+    "angular-animate": "1.3.0-beta.13",
+    "angular-route": "1.3.0-beta.13",
+    "angular-sanitize": "1.3.0-beta.13",
+    "angular-cookies": "1.3.0-beta.13"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.3.0-beta.13",
+    "angular-scenario": "1.3.0-beta.13"
+  }
+}

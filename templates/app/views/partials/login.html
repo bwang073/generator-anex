@@ -1,0 +1,18 @@
+<form ng-submit="login()">
+	<table>
+		<tr ng-if="err">
+			<td colspan="2"><p style="color: red;" ng-bind="err"></p></td>
+		</tr>
+		<tr>
+			<td>User Id:</td>
+			<td><input ng-model="account.userid" type="text"></td>
+		</tr>
+		<tr>
+			<td>Password:</td>
+			<td><input ng-model="account.password" type="password"></td>
+		</tr>
+		<tr>
+			<td colspan="2"><input type="submit"></td>
+		</tr>
+	</table>
+</form>
