@@ -32,10 +32,24 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-
+		wiredep : {
+			target : {
+				src : 'views/index.html', // point to your HTML file.
+				ignorePath : '../public/'
+			}
+		},
+		clean : [ '<%%= yeoman.dist %>', '.tmp' ],
 		// Performs rewrites based on filerev and the useminPrepare configuration
 		usemin : {
-			html : [ '<%%= yeoman.dist %>/views/index.html' ]
+			html : [ '<%%= yeoman.dist %>/views/index.html' ],
+			options : {
+				assetsDirs : [ '<%%= yeoman.dist %>/public' ]
+			}
+		},
+		filerev : {
+			main : {
+				src : [ '<%%= yeoman.dist %>/public/javascripts/**/*.js' ]
+			}
 		},
 		copy : {
 			main : {
@@ -52,6 +66,6 @@ module.exports = function(grunt) {
 		}
 	});
 
-	grunt.registerTask('build', [ 'useminPrepare', 'concat', 'copy', 'uglify', 'usemin' ]);
+	grunt.registerTask('build', [ 'clean', 'wiredep', 'useminPrepare', 'concat', 'copy', 'uglify', 'filerev', 'usemin' ]);
 
 };
