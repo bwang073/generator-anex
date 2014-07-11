@@ -63,9 +63,66 @@ module.exports = function(grunt) {
 					dest : '<%%= yeoman.dist %>/'
 				} ]
 			}
+		},
+		express : {
+			options : {
+				port : process.env.PORT || 3000
+			},
+			dev : {
+				options : {
+					script : 'app.js',
+					debug : true
+				}
+			},
+			prod : {
+				options : {
+					script : '<%%= yeoman.dist %>/app.js',
+					node_env : 'production',
+				}
+			}
+		},
+		open : {
+			server : {
+				url : 'http://localhost:<%%= express.options.port %>'
+			}
+		},
+		watch : {
+			dev : {
+				files : [ 'public/**/*', 'views/**/*' ],
+				tasks : [],
+				options : {
+					livereload : true,
+				}
+			}
+		},
+		jshint : {
+			options : {
+				jshintrc : 'public/javascripts/.jshintrc',
+				reporter : require('jshint-stylish')
+			},
+			server : [ 'app.js', 'config/**/*.js', 'routes/**/*.js' ],
+			client : [ 'public/javascripts/**/*.js' ],
+			all : [ 'app.js', 'config/**/*.js', 'routes/**/*.js', 'public/**/*.js' ],
+			test : []
 		}
+	});
+
+	grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
+		this.async();
 	});
 
 	grunt.registerTask('build', [ 'clean', 'wiredep', 'useminPrepare', 'concat', 'copy', 'uglify', 'filerev', 'usemin' ]);
 
+	grunt.registerTask('serve', function(target) {
+		if (target === 'dist') {
+			return grunt.task.run([ 'build', 'express:prod', 'open', 'express-keepalive' ]);
+		}
+		//
+		// if (target === 'debug') {
+		// return grunt.task.run([ 'clean:server', 'env:all', 'concurrent:server', 'injector', 'bowerInstall', 'autoprefixer', 'concurrent:debug' ]);
+		// }
+
+		grunt.task.run([ 'wiredep', 'express:dev', 'open', 'watch:dev' ]);
+	});
+	grunt.registerTask('default', [ 'jshint:client' ]);
 };

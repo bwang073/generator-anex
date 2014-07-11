@@ -25,15 +25,20 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 
+if (app.get('env') === 'development') {
+	app.use(require('connect-livereload')());
+}
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
 	secret : settings.cookie_secret,
 	store : new MongoStore({
 		db : settings.db,
-	})
+	}),
+	resave : true,
+	saveUninitialized : true
 }));
-
 
 app.use('/', routes);
 

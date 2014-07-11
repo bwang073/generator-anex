@@ -22,10 +22,10 @@ angular.module('myportal', [ 'ngRoute', 'ngSanitize', 'ngAnimate', 'ngCookies', 
 	$provide.factory('httpInterceptor', [ '$q', '$location', function($q, $location) {
 		return {
 			'responseError' : function(rejection) {
-				if (rejection.status == 401) {
+				if (rejection.status === 401) {
 					var backto = $location.path();
 					$location.path('/login');
-					if (backto != '/' && backto != '/login') {
+					if (backto !== '/' && backto !== '/login') {
 						$location.search('backto', backto);
 					}
 				} else {
