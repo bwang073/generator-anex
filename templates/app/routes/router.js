@@ -22,7 +22,7 @@ router.get('/partials/login', function(req, res) {
 router.post('/login', function(req, res, next) {
 	// Simple login, add your authentication here.
 	if (req.body.userid != 'brianwwo') {
-		var err = new Error(util.format('No such user %s existing.', req.body.user));
+		var err = new Error(util.format('No such user %s existing.', req.body.userid));
 		err.status = 401;
 		next(err);
 	} else if (req.body.password != 'brianwwo') {

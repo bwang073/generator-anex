@@ -88,7 +88,7 @@ module.exports = function(grunt) {
 		},
 		watch : {
 			dev : {
-				files : [ 'public/**/*', 'views/**/*' ],
+				files : [ 'public/stylesheets/**/*', 'public/images/**/*', 'views/**/*' ],
 				tasks : [],
 				options : {
 					livereload : true,
@@ -104,8 +104,56 @@ module.exports = function(grunt) {
 			client : [ 'public/javascripts/**/*.js' ],
 			all : [ 'app.js', 'config/**/*.js', 'routes/**/*.js', 'public/**/*.js' ],
 			test : []
+		},
+		env : {
+			test : {
+				NODE_ENV : 'test'
+			}
+		},
+		mochaTest : {
+			test : {
+				options : {
+					reporter : 'spec',
+					require : 'test/server/blanket'
+				},
+				src : [ 'test/server/**/*Spec.js' ]
+			},
+			coverage : {
+				options : {
+					reporter : 'html-cov',
+					// use the quiet flag to suppress the mocha console output
+					quiet : true,
+					// specify a destination file to capture the mocha
+					// output (the quiet option does not suppress this)
+					captureFile : 'coverage.html'
+				},
+				src : [ 'test/server/**/*Spec.js' ]
+			}
+
+		},
+		karma : {
+			unit : {
+				configFile : 'test/karma.conf.js',
+				singleRun: true,
+				reporters: ['progress', 'coverage'],
+
+			    preprocessors: {
+			      // source files, that you wanna generate coverage for
+			      // do not include tests or libraries
+			      // (these files will be instrumented by Istanbul)
+			      'public/javascripts/**/*.js': ['coverage']
+			    },
+
+			    // optionally, configure the reporter
+			    coverageReporter: {
+			      type : 'html',
+			      dir : 'coverage/'
+			    }
+			}
 		}
 	});
+
+	grunt.registerTask('test', [ 'env:test', 'mochaTest' , 'karma']);
 
 	grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
 		this.async();
@@ -117,12 +165,7 @@ module.exports = function(grunt) {
 		if (target === 'dist') {
 			return grunt.task.run([ 'build', 'express:prod', 'open', 'express-keepalive' ]);
 		}
-		//
-		// if (target === 'debug') {
-		// return grunt.task.run([ 'clean:server', 'env:all', 'concurrent:server', 'injector', 'bowerInstall', 'autoprefixer', 'concurrent:debug' ]);
-		// }
-
 		grunt.task.run([ 'wiredep', 'express:dev', 'open', 'watch:dev' ]);
 	});
-	grunt.registerTask('default', [ 'jshint:client' ]);
+	grunt.registerTask('default', [ 'jshint:client', 'test', 'build' ]);
 };

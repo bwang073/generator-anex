@@ -31,14 +31,22 @@ if (app.get('env') === 'development') {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({
-	secret : settings.cookie_secret,
-	store : new MongoStore({
-		db : settings.db,
-	}),
-	resave : true,
-	saveUninitialized : true
-}));
+if (app.get('env') === 'test') {
+	app.use(session({
+		secret : settings.cookie_secret,
+		resave : true,
+		saveUninitialized : true
+	}));
+} else {
+	app.use(session({
+		secret : settings.cookie_secret,
+		store : new MongoStore({
+			db : settings.db,
+		}),
+		resave : true,
+		saveUninitialized : true
+	}));
+}
 
 app.use('/', routes);
 

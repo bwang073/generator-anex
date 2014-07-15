@@ -22,10 +22,11 @@ var BwGenerator = yeoman.generators.Base.extend({
 			this.invoke('karma:app', {
 				options : {
 					'skip-install' : this.options['skip-install'],
+					'plugins' : 'karma-phantomjs-launcher,karma-jasmine,karma-coverage',
 					'base-path' : '../',
 					'coffee' : this.options.coffee,
 					'travis' : true,
-					'bower-components' : [ 'angular-animate/angular-animate.js', 'angular-cookies/angular-cookies.js', 'angular-resource/angular-resource.js', 'angular-route/angular-route.js', 'angular-sanitize/angular-sanitize.js', 'angular/angular.js', 'angular-mocks/angular-mocks.js' ].join(','),
+					'bower-components' : [ 'angular/angular.js', 'angular-animate/angular-animate.js', 'angular-cookies/angular-cookies.js', 'angular-resource/angular-resource.js', 'angular-route/angular-route.js', 'angular-sanitize/angular-sanitize.js', 'angular-mocks/angular-mocks.js' ].join(','),
 					'app-files' : 'public/javascripts/**/*.js',
 					'test-files' : 'test/client/**/*.js',
 					'bower-components-path' : 'public/bower_components'
