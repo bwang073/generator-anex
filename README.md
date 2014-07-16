@@ -31,7 +31,7 @@ $ npm install -g generator-anex
 Finally, initiate the generator:
 
 ```bash
-$ yo bw
+$ yo anex
 ```
 
 ### Getting To Know Yeoman
