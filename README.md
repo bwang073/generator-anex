@@ -1,5 +1,4 @@
-# generator-anex [![Build Status](https://secure.travis-ci.org/bwang073/generator-anex.png?branch=master)](https://travis-ci.org/bwang073/generator-anex)
-
+# generator-anex
 > [Yeoman](http://yeoman.io) generator
 
 
