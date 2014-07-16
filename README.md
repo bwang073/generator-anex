@@ -34,12 +34,27 @@ Finally, initiate the generator:
 $ yo anex
 ```
 
-### Getting To Know Yeoman
+### About generator-anex
 
-Yeoman has a heart of gold. He's a person with feelings and opinions, but he's very easy to work with. If you think he's too opinionated, he can be easily convinced.
+After you done above command, you can get a full constructed webapp project.
 
-If you'd like to get to know Yeoman better and meet some of his friends, [Grunt](http://gruntjs.com) and [Bower](http://bower.io), check out the complete [Getting Started Guide](https://github.com/yeoman/yeoman/wiki/Getting-Started).
+The client side is using angular.js.
 
+The server side is using express.js.
+
+And also, because we are using the connect-mongo as the session store, make sure open your mongo db before run the webapp.
+
+### Command
+
+grunt: run jshint, test, and build a pre-release app, under dist folder.
+
+grunt test: test server and client side code, generate code coverage base on HTML.
+
+grunt build: build a release version.
+
+grunt serve: run app.
+
+grunt serve:dist: run pre-release app.
 
 ## License
 
