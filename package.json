@@ -4,7 +4,10 @@
   "description": "Yeoman generator",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "bwang073/generator-anex",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bwang073/generator-anex"
+  },
   "author": {
     "name": "Bo Wang",
     "email": "brianwwo@gmail.com",
@@ -16,9 +19,6 @@
   "scripts": {
     "test": "mocha"
   },
-  "files": [
-    "app"
-  ],
   "keywords": [
     "yeoman-generator"
   ],
