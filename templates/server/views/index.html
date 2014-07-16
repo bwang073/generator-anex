@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html id="ng-app" ng-app="myportal">
+<head>
+<title>Dashboard</title>
+<link rel='stylesheet' href='css/style.css' />
+</head>
+<body ng-controller="MainController">
+	<header ng-hide="isLogin()">
+		<a href="javascript:;" ng-click="logout()">Logout</a>
+	</header>
+	<div ng-view></div>
+	<!-- build:js(client) scripts/vendor.js -->
+	<!-- bower:js -->
+	<!-- endbower -->
+	<!-- endbuild -->
+	<!-- build:js(client) scripts/scripts.js -->
+	<script src="scripts/app.js"></script>
+	<script src="scripts/ctrls/mainCtrl.js"></script>
+	<script src="scripts/ctrls/homeCtrl.js"></script>
+	<script src="scripts/ctrls/loginCtrl.js"></script>
+	<script src="scripts/ctrls/listCtrl.js"></script>
+	<script src="scripts/services/daoService.js"></script>
+	<!-- endbuild -->
+</body>
+</html>

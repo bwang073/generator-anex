@@ -19,26 +19,28 @@ var BwGenerator = yeoman.generators.Base.extend({
 		this.sourceRoot(path.join(__dirname, '../templates'));
 
 		this.on('end', function() {
-			this.invoke('karma:app', {
-				options : {
-					'skip-install' : this.options['skip-install'],
-					'plugins' : 'karma-phantomjs-launcher,karma-jasmine,karma-coverage',
-					'base-path' : '../',
-					'coffee' : this.options.coffee,
-					'travis' : true,
-					'bower-components' : [ 'angular/angular.js', 'angular-animate/angular-animate.js', 'angular-cookies/angular-cookies.js', 'angular-resource/angular-resource.js', 'angular-route/angular-route.js', 'angular-sanitize/angular-sanitize.js', 'angular-mocks/angular-mocks.js' ].join(','),
-					'app-files' : 'public/javascripts/**/*.js',
-					'test-files' : 'test/client/**/*.js',
-					'bower-components-path' : 'public/bower_components'
-				}
-			});
+			var _this = this;
 			this.installDependencies({
 				skipInstall : this.options['skip-install'],
 				skipMessage : this.options['skip-message'],
 				callback : function() {
+					_this.invoke('karma:app', {
+						options : {
+							'skip-install' : _this.options['skip-install'],
+							'plugins' : 'karma-coverage',
+							'base-path' : '../../../',
+							'coffee' : _this.options.coffee,
+							'travis' : true,
+							'bower-components' : [ 'angular/angular.js', 'angular-animate/angular-animate.js', 'angular-cookies/angular-cookies.js', 'angular-resource/angular-resource.js', 'angular-route/angular-route.js', 'angular-sanitize/angular-sanitize.js', 'angular-mocks/angular-mocks.js' ].join(','),
+							'app-files' : 'client/scripts/**/*.js',
+							'test-files' : 'test/client/specs/**/*.js',
+							'config-path' : 'test/client/configs',
+							'bower-components-path' : 'client/bower_components'
+						}
+					});
 					var wireDepConfig = {
-						ignorePath : '../public/',
-						src : 'views/index.html'
+						ignorePath : '../../client/',
+						src : 'server/views/index.html'
 					};
 					wiredep(wireDepConfig);
 				}
@@ -70,12 +72,9 @@ var BwGenerator = yeoman.generators.Base.extend({
 		this.copy('common/_package.json', 'package.json');
 		this.copy('common/_bower.json', 'bower.json');
 		this.copy('common/_Gruntfile.js', 'Gruntfile.js');
-		this.copy('_app.js', 'app.js');
-		this.directory('app/bin', 'bin');
-		this.directory('app/config', 'config');
-		this.directory('app/public', 'public');
-		this.directory('app/routes', 'routes');
-		this.directory('app/views', 'views');
+		this.directory('bin', 'bin');
+		this.directory('server', 'server');
+		this.directory('client', 'client');
 		this.directory('test', 'test');
 	},
 

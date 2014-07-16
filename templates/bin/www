@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+var logger = require('../server/config/logger');
+var app = require('../server/server');
+
+app.set('port', process.env.PORT || 3000);
+
+var server = app.listen(app.get('port'), function() {
+	logger.info('Express server listening on port %s', server.address().port);
+});
+
+module.exports = app;

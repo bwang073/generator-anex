@@ -19,9 +19,9 @@ module.exports = function(grunt) {
 		// concat, minify and revision files. Creates configurations in memory so
 		// additional tasks can operate on them
 		useminPrepare : {
-			html : 'views/index.html',
+			html : 'server/views/index.html',
 			options : {
-				dest : '<%%= yeoman.dist %>/public',
+				dest : '<%%= yeoman.dist %>/client',
 				flow : {
 					html : {
 						steps : {
@@ -34,32 +34,35 @@ module.exports = function(grunt) {
 		},
 		wiredep : {
 			target : {
-				src : 'views/index.html', // point to your HTML file.
-				ignorePath : '../public/'
+				src : 'server/views/index.html', // point to your HTML file.
+				ignorePath : '../../client/'
 			}
 		},
-		clean : [ '<%%= yeoman.dist %>', '.tmp' ],
+		clean : {
+			build : [ '<%%= yeoman.dist %>', '.tmp' ],
+			test : [ 'test/reporters' ]
+		},
 		// Performs rewrites based on filerev and the useminPrepare configuration
 		usemin : {
-			html : [ '<%%= yeoman.dist %>/views/index.html' ],
+			html : [ '<%%= yeoman.dist %>/server/views/index.html' ],
 			options : {
-				assetsDirs : [ '<%%= yeoman.dist %>/public' ]
+				assetsDirs : [ '<%%= yeoman.dist %>/client' ]
 			}
 		},
 		filerev : {
 			main : {
-				src : [ '<%%= yeoman.dist %>/public/javascripts/**/*.js' ]
+				src : [ '<%%= yeoman.dist %>/client/scripts/**/*.js' ]
 			}
 		},
 		copy : {
 			main : {
 				files : [ {
 					expand : true,
-					src : [ 'package.json', 'app.js', 'bin/**', 'config/**', 'views/**', 'routes/**' ],
+					src : [ 'package.json', 'server/**', 'bin/**' ],
 					dest : '<%%= yeoman.dist %>/'
 				}, {
 					expand : true,
-					src : [ 'public/stylesheets/**', 'public/images/**' ],
+					src : [ 'client/css/**', 'client/images/**' ],
 					dest : '<%%= yeoman.dist %>/'
 				} ]
 			}
@@ -70,13 +73,13 @@ module.exports = function(grunt) {
 			},
 			dev : {
 				options : {
-					script : 'app.js',
+					script : 'bin/www',
 					debug : true
 				}
 			},
 			prod : {
 				options : {
-					script : '<%%= yeoman.dist %>/app.js',
+					script : '<%%= yeoman.dist %>/bin/www',
 					node_env : 'production',
 				}
 			}
@@ -88,7 +91,7 @@ module.exports = function(grunt) {
 		},
 		watch : {
 			dev : {
-				files : [ 'public/stylesheets/**/*', 'public/images/**/*', 'views/**/*' ],
+				files : [ 'client/css/**/*', 'client/images/**/*', 'server/views/**/*' ],
 				tasks : [],
 				options : {
 					livereload : true,
@@ -97,13 +100,11 @@ module.exports = function(grunt) {
 		},
 		jshint : {
 			options : {
-				jshintrc : 'public/javascripts/.jshintrc',
+				jshintrc : 'client/scripts/.jshintrc',
 				reporter : require('jshint-stylish')
 			},
-			server : [ 'app.js', 'config/**/*.js', 'routes/**/*.js' ],
-			client : [ 'public/javascripts/**/*.js' ],
-			all : [ 'app.js', 'config/**/*.js', 'routes/**/*.js', 'public/**/*.js' ],
-			test : []
+			server : [ 'server/**/*.js' ],
+			client : [ 'client/scripts/**/*.js' ]
 		},
 		env : {
 			test : {
@@ -114,9 +115,9 @@ module.exports = function(grunt) {
 			test : {
 				options : {
 					reporter : 'spec',
-					require : 'test/server/blanket'
+					require : 'test/server/configs/blanket'
 				},
-				src : [ 'test/server/**/*Spec.js' ]
+				src : [ 'test/server/specs/**/*Spec.js' ]
 			},
 			coverage : {
 				options : {
@@ -125,41 +126,41 @@ module.exports = function(grunt) {
 					quiet : true,
 					// specify a destination file to capture the mocha
 					// output (the quiet option does not suppress this)
-					captureFile : 'coverage.html'
+					captureFile : 'reporters/server/coverage.html'
 				},
-				src : [ 'test/server/**/*Spec.js' ]
+				src : [ 'test/server/specs/**/*Spec.js' ]
 			}
 
 		},
 		karma : {
 			unit : {
-				configFile : 'test/karma.conf.js',
-				singleRun: true,
-				reporters: ['progress', 'coverage'],
+				configFile : 'test/client/configs/karma.conf.js',
+				singleRun : true,
+				reporters : [ 'progress', 'coverage' ],
 
-			    preprocessors: {
-			      // source files, that you wanna generate coverage for
-			      // do not include tests or libraries
-			      // (these files will be instrumented by Istanbul)
-			      'public/javascripts/**/*.js': ['coverage']
-			    },
+				preprocessors : {
+					// source files, that you wanna generate coverage for
+					// do not include tests or libraries
+					// (these files will be instrumented by Istanbul)
+					'client/scripts/**/*.js' : [ 'coverage' ]
+				},
 
-			    // optionally, configure the reporter
-			    coverageReporter: {
-			      type : 'html',
-			      dir : 'coverage/'
-			    }
+				// optionally, configure the reporter
+				coverageReporter : {
+					type : 'html',
+					dir : 'reporters/client/coverage/'
+				}
 			}
 		}
 	});
 
-	grunt.registerTask('test', [ 'env:test', 'mochaTest' , 'karma']);
+	grunt.registerTask('test', [ 'clean:test', 'env:test', 'mochaTest', 'karma' ]);
 
 	grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
 		this.async();
 	});
 
-	grunt.registerTask('build', [ 'clean', 'wiredep', 'useminPrepare', 'concat', 'copy', 'uglify', 'filerev', 'usemin' ]);
+	grunt.registerTask('build', [ 'clean:build', 'wiredep', 'useminPrepare', 'concat', 'copy', 'uglify', 'filerev', 'usemin' ]);
 
 	grunt.registerTask('serve', function(target) {
 		if (target === 'dist') {
